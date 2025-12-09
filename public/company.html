@@ -2,27 +2,65 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>BugBounty MVP — Company</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BugBounty MVP — Company Dashboard</title>
   <link rel="stylesheet" href="/style.css" />
- </head>
+</head>
 <body>
-  <h1>Company — Received Reports</h1>
-  <div id="reports"></div>
-  <p><a href="/">Submit bug</a> · <a href="/tee.html">TEE</a> · <a href="/explorer.html">Blockchain</a></p>
+  <header>
+    <div class="container">
+      <h1>🏢 Bug Bounty Platform</h1>
+      <div class="subtitle">Company Dashboard — Received Security Reports</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div id="reports"></div>
+    
+    <nav class="nav">
+      <a href="/">🔒 Submit Bug</a>
+      <a href="/tee.html">🔐 TEE Attestations</a>
+      <a href="/explorer.html">⛓️ Blockchain Explorer</a>
+    </nav>
+  </div>
 
   <script>
     async function load() {
-      const res = await fetch('/api/company/reports');
-      const list = await res.json();
-      const el = document.getElementById('reports');
-      if (!list.length) {
-        el.innerHTML = '<p>No reports yet.</p>';
-        return;
+      try {
+        const res = await fetch('/api/company/reports');
+        const list = await res.json();
+        const el = document.getElementById('reports');
+        
+        if (!list.length) {
+          el.innerHTML = '<div class="empty-state"><p>📭 No reports submitted yet.</p><p style="margin-top: 12px; font-size: 0.9rem;">Waiting for security researchers to submit vulnerabilities...</p></div>';
+          return;
+        }
+        
+        el.innerHTML = list.map(r => {
+          const paidBadge = r.paid 
+            ? '<span class="badge badge-success">✓ Paid</span>' 
+            : '<span class="badge badge-info">Pending</span>';
+          
+          const attestedBadge = r.attestation.attested
+            ? '<span class="badge badge-success">✓ Attested</span>'
+            : '<span class="badge badge-warning">Not Attested</span>';
+          
+          return `
+            <div class="card">
+              <h3>${r.title}</h3>
+              <p><strong>Reporter:</strong> ${r.reporter || 'Anonymous'}</p>
+              <p><strong>Status:</strong> ${paidBadge} ${attestedBadge}</p>
+              <p><strong>TEE Score:</strong> <span class="score">${r.attestation.score}</span></p>
+              ${r.paid ? `<p class="payment-info"><strong>Payout:</strong> <span class="payment-amount">$${r.payout || 0}</span></p>` : ''}
+              <p style="margin-top: 12px; font-size: 0.85rem; color: #94a3b8;"><strong>Report ID:</strong> <span class="hash">${r.reportId}</span></p>
+            </div>
+          `;
+        }).join('\n');
+      } catch (err) {
+        document.getElementById('reports').innerHTML = '<div class="card"><p style="color: #ef4444;">Error loading reports: ' + err.message + '</p></div>';
       }
-      el.innerHTML = list.map(r => {
-        return `<div class="card"><h3>${r.title}</h3><p>reporter: ${r.reporter}</p><p>paid: ${r.paid} payout: ${r.payout || 0}</p><p>score: ${r.attestation.score}</p></div>`;
-      }).join('\n');
     }
+    
     load();
     setInterval(load, 3000);
   </script>

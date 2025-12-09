@@ -2,25 +2,68 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>BugBounty MVP — TEE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BugBounty MVP — TEE Attestations</title>
   <link rel="stylesheet" href="/style.css" />
- </head>
+</head>
 <body>
-  <h1>TEE — Attestations</h1>
-  <div id="log"></div>
-  <p><a href="/">Submit bug</a> · <a href="/company.html">Company</a> · <a href="/explorer.html">Blockchain</a></p>
+  <header>
+    <div class="container">
+      <h1>🔐 Bug Bounty Platform</h1>
+      <div class="subtitle">TEE (Trusted Execution Environment) — Attestation Verification</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid #334155; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+      <h3 style="color: #60a5fa; margin-bottom: 12px;">ℹ️ About TEE Attestation</h3>
+      <p style="color: #cbd5e1; line-height: 1.6; margin-bottom: 8px;">The Trusted Execution Environment validates bug reports using secure, isolated computation.</p>
+      <p style="color: #94a3b8; font-size: 0.9rem;"><strong>Attestation Criteria:</strong> Reports with severity ≥6 or containing 'exploit' are automatically attested and paid.</p>
+    </div>
+
+    <div id="log"></div>
+    
+    <nav class="nav">
+      <a href="/">🔒 Submit Bug</a>
+      <a href="/company.html">🏢 Company Dashboard</a>
+      <a href="/explorer.html">⛓️ Blockchain Explorer</a>
+    </nav>
+  </div>
 
   <script>
     async function loadLog() {
-      // server does not expose TEE log directly; get recent reports and show attestations
-      const res = await fetch('/api/company/reports');
-      const list = await res.json();
-      const el = document.getElementById('log');
-      if (!list.length) { el.innerHTML = '<p>No attestations yet.</p>'; return; }
-      el.innerHTML = list.map(r => {
-        return `<div class="card"><h3>${r.title}</h3><p>reporter: ${r.reporter}</p><p>attested: ${r.attestation.attested} score: ${r.attestation.score}</p></div>`;
-      }).join('\n');
+      try {
+        const res = await fetch('/api/company/reports');
+        const list = await res.json();
+        const el = document.getElementById('log');
+        
+        if (!list.length) {
+          el.innerHTML = '<div class="empty-state"><p>🔍 No attestations yet.</p><p style="margin-top: 12px; font-size: 0.9rem;">Waiting for bug reports to be submitted and attested...</p></div>';
+          return;
+        }
+        
+        el.innerHTML = list.map(r => {
+          const attestedClass = r.attestation.attested ? '' : 'not-attested';
+          const attestedIcon = r.attestation.attested ? '✅' : '❌';
+          const attestedText = r.attestation.attested ? 'Attested' : 'Not Attested';
+          
+          return `
+            <div class="card">
+              <h3>${r.title}</h3>
+              <p><strong>Reporter:</strong> ${r.reporter || 'Anonymous'}</p>
+              <div class="attestation-box ${attestedClass}">
+                <p><strong>${attestedIcon} Status:</strong> ${attestedText}</p>
+                <p><strong>TEE Score:</strong> <span class="score">${r.attestation.score}</span></p>
+              </div>
+              <p style="margin-top: 12px; font-size: 0.85rem; color: #94a3b8;"><strong>Report ID:</strong> <span class="hash">${r.reportId}</span></p>
+            </div>
+          `;
+        }).join('\n');
+      } catch (err) {
+        document.getElementById('log').innerHTML = '<div class="card"><p style="color: #ef4444;">Error loading attestations: ' + err.message + '</p></div>';
+      }
     }
+    
     loadLog();
     setInterval(loadLog, 3000);
   </script>

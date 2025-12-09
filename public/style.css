@@ -1,5 +1,375 @@
-body { font-family: Arial, Helvetica, sans-serif; max-width: 900px; margin: 24px auto; padding: 0 16px; }
-h1 { margin-bottom: 8px }
-.card { border: 1px solid #ddd; padding: 10px; margin: 8px 0; border-radius: 6px; background: #fafafa }
-form label { display:block; margin: 8px 0 }
-pre { background:#111; color:#bfb; padding:12px; border-radius:6px }
+/* Modern Bug Bounty Platform - Black & Blue with Green Accents */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+  color: #e5e7eb;
+  min-height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* Header Styles */
+header {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-bottom: 2px solid #1e40af;
+  padding: 24px 0;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #60a5fa;
+  margin-bottom: 8px;
+  text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
+}
+
+header .subtitle {
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 16px 0;
+  border-top: 1px solid #334155;
+  margin-top: 24px;
+}
+
+.nav a {
+  color: #60a5fa;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: #1e293b;
+  border: 1px solid #334155;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nav a:hover {
+  background: #1e40af;
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.4);
+}
+
+/* Card Styles */
+.card {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 16px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), 0 0 20px rgba(30, 64, 175, 0.1);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 30px rgba(30, 64, 175, 0.2);
+  border-color: #3b82f6;
+}
+
+.card h3 {
+  color: #60a5fa;
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.card p {
+  color: #cbd5e1;
+  margin: 8px 0;
+  line-height: 1.6;
+}
+
+.card strong {
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+/* Form Styles */
+form {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 32px;
+  margin: 24px 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+form label {
+  display: block;
+  color: #94a3b8;
+  font-weight: 500;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+form input,
+form textarea,
+form select {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  background: #0f172a;
+  border: 2px solid #334155;
+  border-radius: 8px;
+  color: #e5e7eb;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+form input:focus,
+form textarea:focus,
+form select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: #1e293b;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), 0 0 20px rgba(59, 130, 246, 0.2);
+}
+
+form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Button Styles */
+button,
+.button {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(30, 64, 175, 0.4);
+}
+
+button:hover,
+.button:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(30, 64, 175, 0.6);
+}
+
+button:active,
+.button:active {
+  transform: translateY(0);
+}
+
+/* Status Badges */
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 4px;
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+  border: 1px solid #10b981;
+}
+
+.badge-info {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+  border: 1px solid #f59e0b;
+}
+
+/* Result Display */
+pre {
+  background: #0a0a0a;
+  color: #10b981;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  overflow-x: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 20px 0;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Info Sections */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.info-card {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.info-card .label {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.info-card .value {
+  color: #60a5fa;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.info-card .value.success {
+  color: #10b981;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #64748b;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+}
+
+/* Loading State */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #60a5fa;
+  font-size: 1.1rem;
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.mt-4 {
+  margin-top: 24px;
+}
+
+.mb-4 {
+  margin-bottom: 24px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .container {
+    padding: 16px 12px;
+  }
+  
+  form {
+    padding: 20px;
+  }
+  
+  .nav {
+    flex-direction: column;
+  }
+  
+  .nav a {
+    text-align: center;
+  }
+}
+
+/* Hash Display */
+.hash {
+  font-family: 'Courier New', monospace;
+  color: #22c55e;
+  font-size: 0.85rem;
+  word-break: break-all;
+}
+
+/* Attestation Display */
+.attestation-box {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid #10b981;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 12px 0;
+}
+
+.attestation-box.not-attested {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+}
+
+/* Block Display */
+.block-header {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  padding: 12px 16px;
+  border-radius: 8px 8px 0 0;
+  margin: -20px -20px 12px -20px;
+}
+
+.block-header strong {
+  color: white;
+  font-size: 1.1rem;
+}
+
+/* Payment Info */
+.payment-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.payment-amount {
+  color: #10b981;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* Score Display */
+.score {
+  display: inline-block;
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}

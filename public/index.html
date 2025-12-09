@@ -2,25 +2,56 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>BugBounty MVP — Hacker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BugBounty MVP — Hacker Portal</title>
   <link rel="stylesheet" href="/style.css" />
- </head>
+</head>
 <body>
-  <h1>Hacker — Submit Bug</h1>
-  <form id="submitForm">
-    <label>Title<br/><input id="title" required /></label><br/>
-    <label>Description<br/><textarea id="description" required></textarea></label><br/>
-    <label>Severity (1-10)<br/><input id="severity" type="number" min="1" max="10" value="5"/></label><br/>
-    <label>Your handle<br/><input id="reporter"/></label><br/>
-    <button type="submit">Submit</button>
-  </form>
-  <pre id="result"></pre>
+  <header>
+    <div class="container">
+      <h1>🔒 Bug Bounty Platform</h1>
+      <div class="subtitle">Hacker Portal — Submit Security Vulnerabilities</div>
+    </div>
+  </header>
 
-  <p><a href="/company.html">Company view</a> · <a href="/tee.html">TEE view</a> · <a href="/explorer.html">Blockchain</a></p>
+  <div class="container">
+    <form id="submitForm">
+      <h2 style="color: #60a5fa; margin-bottom: 24px; font-size: 1.5rem;">Submit Bug Report</h2>
+      
+      <label for="title">Title</label>
+      <input id="title" type="text" placeholder="Enter a descriptive title for the bug" required />
+      
+      <label for="description">Description</label>
+      <textarea id="description" placeholder="Provide detailed information about the vulnerability..." required></textarea>
+      
+      <label for="severity">Severity (1-10)</label>
+      <input id="severity" type="number" min="1" max="10" value="5" placeholder="Rate the severity" />
+      
+      <label for="reporter">Your Handle</label>
+      <input id="reporter" type="text" placeholder="Your username or handle" />
+      
+      <button type="submit">🚀 Submit Bug Report</button>
+    </form>
+
+    <div id="resultContainer" style="display: none;">
+      <div class="card">
+        <h3>✅ Submission Result</h3>
+        <pre id="result"></pre>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a href="/company.html">🏢 Company Dashboard</a>
+      <a href="/tee.html">🔐 TEE Attestations</a>
+      <a href="/explorer.html">⛓️ Blockchain Explorer</a>
+    </nav>
+  </div>
 
   <script>
     const form = document.getElementById('submitForm');
     const result = document.getElementById('result');
+    const resultContainer = document.getElementById('resultContainer');
+    
     form.addEventListener('submit', async e => {
       e.preventDefault();
       const payload = {
@@ -29,10 +60,26 @@
         severity: Number(document.getElementById('severity').value),
         reporter: document.getElementById('reporter').value
       };
-      result.textContent = 'Submitting...';
-      const res = await fetch('/api/submit', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
-      const data = await res.json();
-      result.textContent = JSON.stringify(data, null, 2);
+      
+      resultContainer.style.display = 'block';
+      result.textContent = 'Submitting to blockchain and TEE...';
+      
+      try {
+        const res = await fetch('/api/submit', { 
+          method: 'POST', 
+          headers: { 'content-type': 'application/json' }, 
+          body: JSON.stringify(payload) 
+        });
+        const data = await res.json();
+        result.textContent = JSON.stringify(data, null, 2);
+        
+        // Reset form on success
+        if (res.ok) {
+          form.reset();
+        }
+      } catch (err) {
+        result.textContent = 'Error: ' + err.message;
+      }
     });
   </script>
 </body>
