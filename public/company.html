@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>BugBounty MVP — Company</title>
+  <link rel="stylesheet" href="/style.css" />
+ </head>
+<body>
+  <h1>Company — Received Reports</h1>
+  <div id="reports"></div>
+  <p><a href="/">Submit bug</a> · <a href="/tee.html">TEE</a> · <a href="/explorer.html">Blockchain</a></p>
+
+  <script>
+    async function load() {
+      const res = await fetch('/api/company/reports');
+      const list = await res.json();
+      const el = document.getElementById('reports');
+      if (!list.length) {
+        el.innerHTML = '<p>No reports yet.</p>';
+        return;
+      }
+      el.innerHTML = list.map(r => {
+        return `<div class="card"><h3>${r.title}</h3><p>reporter: ${r.reporter}</p><p>paid: ${r.paid} payout: ${r.payout || 0}</p><p>score: ${r.attestation.score}</p></div>`;
+      }).join('\n');
+    }
+    load();
+    setInterval(load, 3000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>BugBounty MVP — Hacker</title>
+  <link rel="stylesheet" href="/style.css" />
+ </head>
+<body>
+  <h1>Hacker — Submit Bug</h1>
+  <form id="submitForm">
+    <label>Title<br/><input id="title" required /></label><br/>
+    <label>Description<br/><textarea id="description" required></textarea></label><br/>
+    <label>Severity (1-10)<br/><input id="severity" type="number" min="1" max="10" value="5"/></label><br/>
+    <label>Your handle<br/><input id="reporter"/></label><br/>
+    <button type="submit">Submit</button>
+  </form>
+  <pre id="result"></pre>
+
+  <p><a href="/company.html">Company view</a> · <a href="/tee.html">TEE view</a> · <a href="/explorer.html">Blockchain</a></p>
+
+  <script>
+    const form = document.getElementById('submitForm');
+    const result = document.getElementById('result');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const payload = {
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value,
+        severity: Number(document.getElementById('severity').value),
+        reporter: document.getElementById('reporter').value
+      };
+      result.textContent = 'Submitting...';
+      const res = await fetch('/api/submit', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
+      const data = await res.json();
+      result.textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+body { font-family: Arial, Helvetica, sans-serif; max-width: 900px; margin: 24px auto; padding: 0 16px; }
+h1 { margin-bottom: 8px }
+.card { border: 1px solid #ddd; padding: 10px; margin: 8px 0; border-radius: 6px; background: #fafafa }
+form label { display:block; margin: 8px 0 }
+pre { background:#111; color:#bfb; padding:12px; border-radius:6px }

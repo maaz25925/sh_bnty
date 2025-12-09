@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>BugBounty MVP — TEE</title>
+  <link rel="stylesheet" href="/style.css" />
+ </head>
+<body>
+  <h1>TEE — Attestations</h1>
+  <div id="log"></div>
+  <p><a href="/">Submit bug</a> · <a href="/company.html">Company</a> · <a href="/explorer.html">Blockchain</a></p>
+
+  <script>
+    async function loadLog() {
+      // server does not expose TEE log directly; get recent reports and show attestations
+      const res = await fetch('/api/company/reports');
+      const list = await res.json();
+      const el = document.getElementById('log');
+      if (!list.length) { el.innerHTML = '<p>No attestations yet.</p>'; return; }
+      el.innerHTML = list.map(r => {
+        return `<div class="card"><h3>${r.title}</h3><p>reporter: ${r.reporter}</p><p>attested: ${r.attestation.attested} score: ${r.attestation.score}</p></div>`;
+      }).join('\n');
+    }
+    loadLog();
+    setInterval(loadLog, 3000);
+  </script>
+</body>
+</html>

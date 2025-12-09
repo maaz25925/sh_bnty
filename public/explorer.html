@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>BugBounty MVP — Blockchain Explorer</title>
+  <link rel="stylesheet" href="/style.css" />
+ </head>
+<body>
+  <h1>Blockchain Explorer</h1>
+  <div id="chain"></div>
+  <p><a href="/">Submit bug</a> · <a href="/company.html">Company</a> · <a href="/tee.html">TEE</a></p>
+  <script>
+    async function loadChain() {
+      const res = await fetch('/api/blockchain');
+      const chain = await res.json();
+      const el = document.getElementById('chain');
+      el.innerHTML = chain.map(b => `\n<div class="card"><strong>index ${b.index}</strong><p>hash: ${b.hash}</p><p>data: ${JSON.stringify(b.data)}</p></div>`).join('\n');
+    }
+    loadChain();
+    setInterval(loadChain, 3000);
+  </script>
+</body>
+</html>
